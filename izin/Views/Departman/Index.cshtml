@@ -1,0 +1,183 @@
+﻿@model izin.Models.DepartmanPageVM
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget sorgulama-kriteri" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                </div>
+            </article>
+        </div>
+    </section>
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget sorgulama-kriteri" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-list"></i> </span>
+                        <h2>Sorgulama Kriterleri</h2>
+                    </header>
+
+                    <div role="contentinfo" class="sorgulama-alani">
+                        <div class="widget-body">
+                            <div class="tab-pane fade active in">
+
+                                @using (Html.BeginForm("Index", "Departman", new { page = 1 }, FormMethod.Post, new { @id = "submitForm" }))
+                                {
+                                    <input id="page" name="page" type="hidden" value="">
+                                    <div class="widget-body">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                                    @Html.LabelFor(model => model.Ad, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-5 form-control-static">
+                                                        @Html.TextBoxFor(model => model.Ad, new { @class = "form-control", @autocomplete = "off" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                                    @Html.LabelFor(model => model.TakimLideriList, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-5 form-control-static">
+                                                        @Html.DropDownListFor(model => model.YoneticiKullaniciId, new SelectList(Model.TakimLideriList, "Id", "AdSoyad", Model.YoneticiKullaniciId), "Yönetici Seçiniz", new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="form-actions btn-foot-s">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-2" style="width: 170px;">
+                                                    <a href="@Url.Action("Ekle")" class="btn btn-primary">
+                                                        <i class="glyphicon glyphicon-plus"></i> &nbsp; Departman Ekle
+                                                    </a>
+                                                </div>
+                                                <a href="@Url.Action("Index")" class="btn btn-primary">
+                                                    <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
+                                                </a>
+                                                <input id="btnSubmit" type="submit" value="Sorgula" class="btn btn-primary">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end widget content -->
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- END ROW -->
+    </section>
+    <section id="widget-grid" class="">
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <div role="contentinfo">
+                        <div class="widget-body">
+                            <div class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <table id="dt_basic" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dt_basic_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th style="width: 20px;">No</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Departman Adı</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Yönetici Adı</th>
+                                                    <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="text-align: right;  padding-right: 30px; width: 100px;">İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.DprtmnList != null && Model.DprtmnList.Count > 0)
+                                            {
+                                                <tbody>
+
+                                                    @{int i = 1;}
+
+                                                    @foreach (var item in Model.DprtmnList)
+                                                    {
+                                                        <tr role="row" class="odd">
+                                                            <td>@(i++)</td>
+                                                            <td>@Html.DisplayFor(model => item.Ad)</td>
+                                                            <td>@(item.YoneticiKullanici.AdSoyad)</td>
+                                                            <td style="text-align: center;">
+                                                                <a href="@Url.Action("Ekle", new { id = item.Id })" class="btn btn-warning btn-xs duzenle-buton" style="border-radius: 5px;" title="Düzenle">
+                                                                    <i class="glyphicon glyphicon-edit"></i> Düzenle
+                                                                </a>
+                                                                <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="DepartmanSil(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Departman Sil">
+                                                                    <i class="glyphicon glyphicon-trash"></i> Departman Sil
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }
+                                            else
+                                            {
+                                                <tbody>
+                                                    <tr class="odd">
+                                                        <td valign="top" colspan="9" class="dataTables_empty">Tablo için gösterilecek bir kayıt bulunmamaktadır</td>
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- END ROW -->
+    </section>
+</div>
+
+
+
+<script type="text/javascript">
+    function DepartmanSil(ekipId) {
+
+        swal({
+            title: "",
+            text: "Departmanı silmek istiyor musunuz?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Departmanı Sil",
+            cancelButtonText: "İptal",
+            closeOnConfirm: false,
+            //onClose: basarili
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Departman/DepartmanSil",
+                    data: { 'ekipId': ekipId },
+                    success: function (response) {
+                        if (response != true) {
+                            swal(response);
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false }
+                                , function () {
+                                    window.location.reload();
+                                }
+
+                            );
+
+                        }
+                    }
+                });
+            });
+
+
+    }
+</script>

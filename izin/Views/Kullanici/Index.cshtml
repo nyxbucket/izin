@@ -1,0 +1,198 @@
+﻿@model izin.Models.KullaniciVM
+@{
+    //Layout = null;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<div class="sayfaalani">
+    <div class="sorgualani">
+        @using (Html.BeginForm("Index", "Kullanici", new { page = 1 }, FormMethod.Post, new { @id = "submitForm" }))
+        {
+            <input id="page" name="page" type="hidden" value="">
+            <div class="widget-body">
+                <fieldset>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                            @Html.LabelFor(model => model.AdSoyad, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10 form-control-static">
+                                @Html.TextBoxFor(model => model.AdSoyad, new { @class = "form-control", @autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.AdSoyad, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                            @Html.LabelFor(c => c.RolEnum, "Roller", new { @class = "control-label col-md-2 font-bold" })
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(m => m.IsRolVal, new SelectList(Model.RolEnumList, "Id", "Ad", Model.IsRolVal),@*"Seçiniz",*@ new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+            <div class="form-actions btn-foot-s">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="@Url.Action("Index")" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
+                        </a>
+                        <input id="btnSubmit" type="submit" value="Sorgula" class="btn btn-primary">
+
+                        <a href="@Url.Action("Ekle","Kullanici")" class="btn btn-primary">Ekle</a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- end widget content -->
+        }
+    </div>
+
+
+
+    <div class="listealani">
+        <table id="dt_basic" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dt_basic_info">
+            <thead>
+                <tr role="row">
+                    <th style="width: 20px;">No</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1">Ad Soyad</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1">Roller</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1">Kullanıcı Adı</th>
+                    <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 50px;">Durum</th>
+                    <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="text-align: right;  padding-right: 30px; width: 100px;">İşlem</th>
+                </tr>
+            </thead>
+            @if (Model.KullaniciList != null && Model.KullaniciList.Count > 0)
+            {
+                <tbody>
+
+                    @{int i = 1;}
+
+                    @foreach (var item in Model.KullaniciList)
+                    {
+                        <tr role="row" class="odd">
+                            <td>@(i++)</td>
+                            <td>@(item.AdSoyad)</td>
+                            <td>
+
+                                @{
+                                    try
+                                    {
+                                        var rolleri = string.Join(",", item.Roller.Select(y => y.RolAdi));
+                                        var replacement = rolleri.Replace("Yonetici", "Yönetici");
+                                        <span>@replacement</span>
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                        continue;
+                                    }
+
+                                }
+
+                            </td>
+                            <td>@Html.DisplayFor(model => item.KullaniciAdi)</td>
+                            <td>
+                                @if (item.AktifMi)
+                                {
+                                    <span class="">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="">Pasif</span>
+                                }
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="@Url.Action("Ekle", new { id = item.Id })" class="btn btn-warning btn-xs duzenle-buton" style="border-radius: 5px;" title="Düzenle">
+                                    Düzenle<i class="glyphicon glyphicon-edit"></i>
+                                </a>
+                                @if (item.AktifMi == true)
+                                {
+
+                                    <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="KullaniciSil(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Pasife Al">
+                                        Sil<i class="glyphicon glyphicon-ban-circle"></i>
+                                    </a>
+
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr class="odd">
+                        <td valign="top" colspan="9" class="dataTables_empty">Tablo için gösterilecek bir kayıt bulunmamaktadır</td>
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+    </div>
+
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+
+<script type="text/javascript">
+
+    function KullaniciSil(kullaniciId) {
+
+        swal({
+            title: "",
+            text: "Kullanıcı pasife alınacaktır. Onaylıyor musunuz?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Pasife Al",
+            cancelButtonText: "İptal",
+            closeOnConfirm: false
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Kullanici/KullaniciSil",
+                    data: { 'kullaniciId': kullaniciId },
+                    success: function (response) {
+
+                        if (response != true) {
+                            swal(response);
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                                function () {
+                                    window.location.href = '/Kullanici/index';
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+    }
+
+    @*function KullaniciSil(kullaniciId) {
+        $.post("@Url.Action("KullaniciSil")", { kullaniciId: kullaniciId }, function (data) {
+
+            if (data) {
+                alert("İşlem Başarılı");
+                window.location.href = '@Url.Action("Index", "Kullanici")';
+                }
+            else{
+                alert("İşlem Başarısız");
+                window.location.href = '@Url.Action("Index", "Kullanici")';
+                }
+            });
+        }*@
+
+
+
+
+</script>

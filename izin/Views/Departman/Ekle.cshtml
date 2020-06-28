@@ -1,0 +1,269 @@
+﻿@using PagedList;
+@using System.Web.Script.Serialization;
+
+@model izin.Models.DepartmanJsonVM
+@{
+    ViewBag.Title = "Ekle";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var departmanList = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(Model.DepartmanKullaniciList);    
+
+    var upEkId = Model.Id;
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <div class="tab-pane fade active in">
+                        @using (Html.BeginForm("Ekle", "Departman", FormMethod.Post, new { id = "submitForm" }))
+                        {
+
+                            <!-- widget content -->
+                            <div class="form-actions">
+                                <div class="row">
+
+
+                                    <div class="row">
+                                        <!-- NEW COL START -->
+                                        <article class="col-sm-12 col-md-12 col-lg-12">
+                                            <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                                                <div role="contentinfo">
+                                                    <div class="widget-body">
+                                                        <div class="tab-pane fade active in">
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+
+                                                                    <div class="row">
+
+                                                                        <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                                                            @Html.LabelFor(model => model.Ad, new { @class = "control-label col-md-2 col-lg-2" })
+                                                                            <div class="col-md-5">
+                                                                                @Html.TextBoxFor(model => model.Ad, new { @class = "form-control col-md-4", @id = "ekipAd", @oninput = "removeChar()" })
+                                                                                @Html.ValidationMessageFor(model => model.Ad, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                                                            @Html.LabelFor(model => model.YoneticiList, new { @class = "control-label col-md-2 col-lg-2" })
+                                                                            <div class="col-md-5 form-control-static">
+                                                                                @Html.DropDownListFor(model => model.YonId, new SelectList(Model.YoneticiList, "Id", "AdSoyad", Model.YonId), "Kullanıcı Seçiniz", new { @class = "form-control", @id = "ekipYonId" })
+                                                                                @Html.ValidationMessageFor(model => model.YonId, "", new { @class = "text-danger" })
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                                                            <label class="control-label col-md-2 col-lg-2">Ekip Üyesi</label>
+                                                                            <div class="col-md-5 form-control-static">
+
+                                                                                <select id="select" class="form-control">
+                                                                                    <option value="-1" unvan="">Seçiniz</option>
+                                                                                    @foreach (var item in Model.KullaniciList)
+                                                                                    {
+                                                                                        <option value="@item.Id">@(item.AdSoyad)</option>
+                                                                                    }
+                                                                                </select>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-lg-pull-2 form-control-static col-md-pull-2">
+                                                                            <div class="col-md-1">
+                                                                                <button class="btn btn-success" id="getData" type="button" onclick="TabloyaEkle()">Listeye Ekle</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <table id="dt_basic" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dt_basic_info">
+                                                                            <thead>
+                                                                                <tr role="row">
+                                                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Ad Soyad</th>
+                                                                                    <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="text-align: right;  padding-right: 30px; width: 120px;">İşlem</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-offset-2" style="padding-right: 5px;">
+                                        <input id="btnOnay" type="button" onclick="Onayla();" value="Kaydet" class="btn btn-primary" name="btnOnay">
+                                        <input onclick="Index();" type="button" class="btn btn-danger" value="İptal">
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!-- end widget content -->
+                        }
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+
+        var _seciliKullanicilar = [];
+
+        $(document).ready(function () {
+
+            //debugger;
+
+            if (@(Model.DepartmanKullaniciList != null && Model.DepartmanKullaniciList.Count() > 0 ? "true" : "false")) {
+
+                var kullArr = @Html.Raw(departmanList);
+                for (var i = 0; i < kullArr.length; i++) {
+                    var table = document.getElementById("dt_basic");
+                    table.style.cssText = "text-align: left;";
+                    var row = table.insertRow(1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+
+                    cell1.innerHTML = kullArr[i].AdSoyad;
+                    cell2.innerHTML = '<input id="Button" type="button" class="btn btn-primary" onclick="ListedenCıkar(this,' + kullArr[i].Id + ')" value="Kullanıcıyı Çıkar"/>';
+                    _seciliKullanicilar.push(parseInt(kullArr[i].Id));
+                }
+            }
+
+        });
+
+        function TabloyaEkle() {
+
+            var id = $('#select').val();
+            var ekipYonId = $("#ekipYonId").val();
+            var adsoyad = $("#select option:selected").text();
+
+
+            if (id > 0) {
+                //debugger
+                if (_seciliKullanicilar.indexOf(parseInt(id)) < 0) {
+
+                        var table = document.getElementById("dt_basic");
+                        var row = table.insertRow(1);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+
+                        cell1.innerHTML = adsoyad;
+                        cell2.innerHTML = '<input id="Button" type="button" class="btn btn-primary" onclick="ListedenCıkar(this,' + id + ')" value="Kullanıcıyı Çıkar"/>';
+                    _seciliKullanicilar.push(parseInt(id));
+                    //}
+                }
+                else {
+                    swal("Kullanıcı Departmana Zaten Eklenmiştir. Lütfen Başka Departman Üyesi Seçiniz.");
+                }
+            } else {
+                swal("Lütfen Departmana Eklemek İstediğiniz Departman Üyesini Seçiniz");
+            }
+        }
+        function ListedenCıkar(obj, id) {
+            var i = obj.parentNode.parentNode.rowIndex;
+            document.getElementById("dt_basic").deleteRow(i);
+
+            var index = _seciliKullanicilar.indexOf(id);
+            delete _seciliKullanicilar[index];
+        }
+
+
+        function Onayla() {
+
+            var kulId = new Array();
+            for (var i = 0; i < _seciliKullanicilar.length; i++) {
+                kulId.push(_seciliKullanicilar[i]);
+            }
+            //kullid birden fazla getirmesin diye
+            let uniquekulId = [...new Set(kulId)];
+
+
+            var ekipAd = $("#ekipAd").val();    //document.getElementById("ekipAd");
+            var ekipYonId = $("#ekipYonId").val();  //document.getElementById("ekipYonId");
+
+            if ((ekipAd == null || ekipAd.length == 0) && (ekipYonId == null || ekipYonId.length == 0)) {
+                swal("Departman oluşturabilmek için Departman adı ve yöneticisi belirlenmelidir");
+            }
+
+            if ((ekipAd == null || ekipAd.length == 0) && ekipYonId.length != 0 ) {
+                swal("Lütfen Departman Eklemek için bir Departman Adı giriniz");
+            }
+            if ((ekipYonId == null || ekipYonId.length == 0) &&  ekipAd.length != 0) {
+                swal("Departman oluşturabilmek için Departman adı ve yöneticisi boş bırakılamaz");
+
+
+            }
+            //if (ekipAd.length)
+
+            var EkId =@(Model.Id);
+            var ekip = {
+                Ad : ekipAd,
+                YonId: ekipYonId,
+                KullaniciIdList: uniquekulId,
+                Id: EkId
+            };
+
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                //testler
+                //url: "/Ekip/Ekle",
+
+                url: "/Departman/DepartmanEkle",
+                datatype: JSON,
+                data: ekip,
+                //data : JSON.stringify({'ekip' : ekip}),
+                //data: ekip,//JSON.stringify({ekip : ekip}),
+
+                //success: function () {
+                //    alert("İşlem Başarı ile gerçekleşti");
+                //    setTimeout(function () { window.location.href = '/Departman/Index'; }, 1000);
+                //},
+                //failure: function () {
+                //    alert("not working...");
+                //    setTimeout(function () { window.location.href = '/Departman/Index'; }, 1000);
+                //}
+                success: function (response) {
+                    if (response != true) {
+                        swal(response);
+                    } else {
+                        //swal("İşlem başarı ile gerçekleşti.");
+                        swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                            function () {
+                                //Index();
+                                //location.reload();
+                                window.location.href = '/Departman/Index';
+                            }
+                        );
+                    }
+                }
+
+            });
+        }
+
+        function Index() {
+            window.location.href = '/Departman/Index';
+        }
+
+        function removeChar() {
+            var tempVal = $("#ekipAd").val();
+            var removedText = tempVal.replace(/[^a-zA-Z0-9\-_().,ıİşŞÜüÖöĞğÇç.\s]/gi, '');
+            $("#ekipAd").val(removedText);
+        }
+
+</script>
+
+

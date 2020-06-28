@@ -1,0 +1,74 @@
+﻿@model izin.Data.Kullanici
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Kullanici</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.KullaniciAdi)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.KullaniciAdi)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Parola)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Parola)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Eposta)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Eposta)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.AdSoyad)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.AdSoyad)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DepartmanId)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DepartmanId)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.AktifMi)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.AktifMi)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

@@ -1,0 +1,137 @@
+﻿@model izin.Models.IzinEkleVM
+@{
+    ViewBag.Title = "Ekle";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+    <div>
+        <h2>Kullanıcı Ekle/Düzenle</h2>
+
+        @using (Html.BeginForm("Ekle", "Izin", FormMethod.Post, new { id = "submitForm", @autocomplete = "off" }))
+        {
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+
+                        @Html.LabelFor(model => model.IzinTipList, new { @class = "control-label col-md-2 font-bold" })
+                        <div class="col-md-5" id="SelectGun">
+                            @Html.DropDownList("izintipId", Model.IzinTipList, "Seçiniz", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-4">
+                            @if (Model.IzinTipId == 0)
+                            {
+                                @Html.ValidationMessageFor(model => model.IzinTipId, "", new { @class = "text-danger" })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="gbaslangicts">
+                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                        @Html.LabelFor(model => model.BaslangicTS, new { @class = "control-label col-md-2" })
+                        <div class="col-md-5" id="datetimepicker1">
+                            @Html.TextBoxFor(model => model.BaslangicTS, "{0:dd.MM.yyyy HH:mm:ss}", new { @class = "form-control" })
+                        </div>
+                        <div id="gbasSaatyaz">
+                            <label class="control-label col-md-2">09:00 </label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.ValidationMessageFor(model => model.BaslangicTS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="gbitists">
+                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                        @Html.LabelFor(model => model.BitisTS, new { @class = "control-label col-md-2" })
+                        <div class="col-md-5" id="dt2">
+                            @Html.TextBoxFor(model => model.BitisTS, "{0:dd.MM.yyyy HH:mm:ss}", new { @class = "form-control datetimefield" })
+                        </div>
+                        <div id="gbtsSaatyaz">
+                            <label class="control-label col-md-2">18:00 </label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.ValidationMessageFor(model => model.BitisTS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                        @Html.LabelFor(model => model.IzinNedeni, new { @class = "control-label col-md-2 font-bold" })
+                        <div class="col-md-5">
+                            @Html.TextBoxFor(model => model.IzinNedeni, new { @class = "form-control", @oninput = "removeChar()" })
+                        </div>
+                        <div class="col-md-4">
+                            @Html.ValidationMessageFor(model => model.IzinNedeni, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Kaydet" class="btn btn-default" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-2">
+                        <label class="label-success">@ViewBag.SuccesMesssage</label>
+                    </div>
+                </div>
+
+            </div>
+
+            if (Model.DurumId == 2)
+            {
+                <p>
+                    <a href="@Url.Action("IzinOnayIndex")" class="back-link">
+                        <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
+                    </a>
+                </p>
+            }
+            else
+            {
+                <p>
+                    <a href="@Url.Action("Index")" class="back-link">
+                        <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
+                    </a>
+                </p>
+            }
+        }
+
+        <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+        <script src="~/Scripts/moment-with-locales.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    </div>
+
+<script type="text/javascript" charset="utf-8">
+
+    var maxgun = new Date().setDate(new Date().getDate() + 90)
+    var maxsaat = new Date().setDate(new Date().getHours() + 2)
+
+    function removeChar() {
+        var tempVal = $("#IzinNedeni").val();
+        console.log(tempVal);
+        var removedText = tempVal.replace(/[^a-zA-Z0-9\-–_’ıİşŞÜüÖöĞğÇç()?\/.,\s]/gi, '');
+        $("#IzinNedeni").val(removedText);
+    }
+
+    function timeFormat() {
+        $('#BaslangicTS').datetimepicker({ format: 'DD.MM.YYYY HH:mm:ss', locale: 'tr' })
+        $('#BitisTS').datetimepicker({ format: 'DD.MM.YYYY', locale: 'tr' })
+    }
+
+
+    $(document).ready(function () {
+        //timeFormat();
+        $('#BaslangicTS').datetimepicker({ format: 'DD.MM.YYYY HH:mm:ss', locale: 'tr' });
+        $('#BitisTS').datetimepicker({ format: 'DD.MM.YYYY', locale: 'tr' });
+    });
+
+</script>

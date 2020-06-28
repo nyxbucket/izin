@@ -1,0 +1,52 @@
+﻿
+<aside id="left-panel">
+    <nav>
+        <ul>
+            
+            @if (User != null && User.IsInRole("Admin"))
+            {
+                <li >
+                    <a href="@Url.Action("index", "Kullanici")" title="Kullanıcılar"><i class="fa fa-lg fa-fw fa-user"></i> <span class="menu-item-parent">Kullanıcılar</span></a>
+                </li>
+
+                <li >
+                    <a href="@Url.Action("index", "Departman")" title="Departman"><i class="fa fa-lg fa-fw fa-group"></i> <span class="menu-item-parent">Departmanlar</span></a>
+                </li>
+            }
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-lg fa-fw fa-calendar-check-o"></i>
+                    <span class="menu-item-parent">İzin İşlemleri</span>
+                </a>
+                <ul>
+                    @if (User != null && User.IsInRole("Yonetici") || User.IsInRole("Personel"))
+                    {
+                        <li >
+                            <a href="@Url.Action("Index", "Izin")" title="İzin Listem">
+                                <i class="fa fa-lg fa-fw fa-list-alt"></i> İzin Listem
+                            </a>
+                        </li>
+                    }
+                    @if (User != null && User.IsInRole("Yonetici"))
+                    {
+                        <li >
+                            <a href="@Url.Action("IzinOnayIndex", "Izin")" title="İzin Onay">
+                                <i class="fa fa-lg fa-fw fa-list-alt"></i> Onay Bekleyen İzinler
+                            </a>
+                        </li>
+                    }
+                    @if (User != null && User.IsInRole("Admin"))
+                    {
+                        <li >
+                            <a href="@Url.Action("TumIzinler", "Izin")" title="Tüm İzinler">
+                                <i class="fa fa-lg fa-fw fa-list-alt"></i> Tüm İzinler
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+            
+        </ul>
+    </nav>
+</aside>

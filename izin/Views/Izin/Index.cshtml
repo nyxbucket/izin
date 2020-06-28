@@ -1,0 +1,261 @@
+﻿@model izin.Models.IzinPageVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<div id="content">
+
+    <section id="widget-grid" class="">
+        <div class="row">
+            <div role="contentinfo" class="sorgulama-alani">
+                <div class="widget-body">
+                    <div class="tab-pane fade active in">
+
+                        @using (Html.BeginForm("Index", "Izin", new { page = 1 }, FormMethod.Post, new { @id = "submitForm" }))
+                        {
+                            <input id="page" name="page" type="hidden" value="">
+                            <div class="widget-body">
+                                <fieldset>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                        @Html.LabelFor(model => model.IzinTipList, new { @class = "control-label col-md-2 font-bold" })
+                                        <div class="col-md-5">
+                                            @Html.DropDownList("izintipId", Model.IzinTipList, "Seçiniz", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                        @Html.LabelFor(model => model.BaslangicTS, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-5">
+                                            @Html.TextBoxFor(model => model.BaslangicTS, "{0:dd.MM.yyyy}", new { @class = "form-control datefield", @autocomplete = "off" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            @Html.ValidationMessageFor(model => model.BaslangicTS, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                        @Html.LabelFor(model => model.BitisTS, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-5">
+                                            @Html.TextBoxFor(model => model.BitisTS, "{0:dd.MM.yyyy}", new { @class = "form-control datefield", @autocomplete = "off" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            @Html.ValidationMessageFor(model => model.BitisTS, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                            <div class="form-actions btn-foot-s">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2" style="width: 170px;">
+                                            <a href="@Url.Action("Ekle")" class="btn btn-primary">
+                                                <i class="glyphicon glyphicon-plus"></i> &nbsp; İzin Ekle
+                                            </a>
+                                        </div>
+                                        <a href="@Url.Action("Index")" class="btn btn-primary">
+                                            <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
+                                        </a>
+                                        <input id="btnSubmit" type="submit" value="Sorgula" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END ROW -->
+    </section>
+    <section id="widget-grid" class="">
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <div role="contentinfo">
+                        <div class="widget-body">
+                            <div class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <table id="dt_basic" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dt_basic_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th style="width: 20px;">No</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">İzin Türü</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Başlangıç Tarihi</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Bitiş Tarihi</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Durumu</th>
+                                                    <th class="sorting_disabled text-center" rowspan="1" colspan="1" style="text-align: right;  padding-right: 30px; width: 100px;">İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            @if (Model.IzinlerimList != null && Model.IzinlerimList.Count > 0)
+                                            {
+                                                <tbody>
+
+                                                    @{int i = 1;}
+
+                                                    @foreach (var item in Model.IzinlerimList)
+                                                    {
+                                                        <tr role="row" class="odd">
+                                                            <td>@(i++)</td>
+                                                            <td>@izin.Helper.EnumHelper.GetEnumDescription((izin.Data.Enum.IzinTipEnum)item.IzinTipId)</td>
+                                                            <td>@string.Format("{0:dd.MM.yyyy HH:mm:ss}", @item.BaslangicTarihi)</td>
+                                                            <td>@string.Format("{0:dd.MM.yyyy HH:mm:ss}", @item.BaslangicTarihi)</td>
+                                                            <td>@izin.Helper.EnumHelper.GetEnumDescription((izin.Data.Enum.IzinDurumEnum)item.DurumId)</td>
+                                                            <td style="text-align: center;">
+                                                                <a href="@Url.Action("Ekle", new { id = item.Id })" class="btn btn-warning btn-xs duzenle-buton" style="border-radius: 5px;" title="Düzenle">
+                                                                    Düzenle
+                                                                </a>
+                                                                <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="DepartmanSil(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Departman Sil">
+                                                                    İzin Sil
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            }
+                                            else
+                                            {
+                                                <tbody>
+                                                    <tr class="odd">
+                                                        <td valign="top" colspan="9" class="dataTables_empty">Tablo için gösterilecek bir kayıt bulunmamaktadır</td>
+                                                    </tr>
+                                                </tbody>
+                                            }
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- END ROW -->
+    </section>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/locales/bootstrap-datepicker.tr.min.js"></script>
+@*<script src="~/Scripts/trDateValidator.js"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/disableautofill/src/jquery.disableAutoFill.min.js"></script>
+
+
+<script type="text/javascript">
+        
+
+    $('.datefield').datepicker({
+        format: 'dd.mm.yyyy',
+        autoclose: true,
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-60:+0",
+        language: 'tr'
+    });
+
+    function IzinSil(izinId) {
+
+        swal({
+            title: "",
+            text: "İzin silinecektir. Onaylıyor musunuz?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "İzini Sil",
+            cancelButtonText: "İptal",
+            closeOnConfirm: false,
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Izin/IzinSil",
+                    data: { 'izinId': izinId },
+                    success: function (response) {
+                        if (response != true) {
+                            swal(response);
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                                function () {
+                                    window.location.href = '/Izin/index';
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+
+    }
+
+    function Onayla(izinId) {
+
+        swal({
+            title: "",
+            text: "İzin talebiniz onaya gönderilecektir. Onaylıyorumusunuz?",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-success",
+            confirmButtonText: "Onayla",
+            cancelButtonText: "Vazgeç",
+            closeOnConfirm: false,
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Izin/Onay",
+                    data: { 'izinId': izinId },
+                    success: function (response) {
+                        if (response != true) {
+                            swal(response);
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                                function () {
+                                    window.location.href = '/Izin/index';
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+
+    }
+
+    function Onay(id) {
+
+        swal({
+            title: "",
+            text: "İzin talebi kabul edilecektir. Onaylıyorumusunuz?",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonClass: "btn-success",
+            confirmButtonText: "Onayla",
+            cancelButtonText: "Vazgeç",
+            closeOnConfirm: false,
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Izin/OnaylaIndex",
+                    data: { 'id': id },
+                    success: function (response) {
+                        if (response != true) {
+                            swal("İşlem sırasında bir hata oluştu");
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                                function () {
+                                    window.location.href = '/Izin/Index';
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+    }
+
+</script>
