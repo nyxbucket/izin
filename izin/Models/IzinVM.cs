@@ -46,6 +46,11 @@ namespace izin.Models
 
         public IzinDurumEnum IzinDurumEnum { get; set; }
         public List<object> IzinDurumEnumList { get; set; }
+
+        [Display(Name = "Departman Personeli")]
+        public SelectList TeamUserList { get; set; }
+
+        public SelectList userList { get; set; }
     }
 
     public class IzinEkleVM     

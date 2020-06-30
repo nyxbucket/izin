@@ -91,9 +91,6 @@ namespace izin.Controllers
                 }
                 model.KullaniciList = kullaniciList;
             }
-
-            //model.RolList = izinContext.Roller.ToList();
-
             model.RolEnumList = EnumHelper.GetEnumDescWithVal<RolEnum>().ToList<object>();
 
             return View(model);

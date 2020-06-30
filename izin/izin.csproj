@@ -159,10 +159,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DepartmanController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IzinController.cs" />
     <Compile Include="Controllers\KullaniciController.cs" />
-    <Compile Include="Controllers\KullanicisController.cs" />
     <Compile Include="Data\Enum.cs" />
     <Compile Include="Data\Departman.cs" />
     <Compile Include="Data\Izin.cs" />
@@ -326,14 +324,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Kullanicis\Create.cshtml" />
-    <Content Include="Views\Kullanicis\Delete.cshtml" />
-    <Content Include="Views\Kullanicis\Details.cshtml" />
-    <Content Include="Views\Kullanicis\Edit.cshtml" />
-    <Content Include="Views\Kullanicis\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Kullanici\Index.cshtml" />
@@ -348,12 +338,13 @@
     <Content Include="Views\Izin\Ekle.cshtml" />
     <Content Include="Views\Izin\Ekle - Copy.cshtml" />
     <Content Include="Views\Shared\_LayoutIzin.cshtml" />
+    <Content Include="Views\Izin\IndexOnay.cshtml" />
+    <Content Include="Views\Izin\TumIzinler.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\" />
     <Folder Include="Content\js\" />
-    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

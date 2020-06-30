@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin;
 using System.Configuration;
+using izin.Helper;
 
 namespace izin.Controllers
 {
@@ -28,10 +29,26 @@ namespace izin.Controllers
         //db connection
         private IzinContext izinContext = new IzinContext();
 
-        // GET: Account        
-        public ActionResult Index()
+        [AllowAnonymous]
+        public ActionResult Navigate()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var UserId = User.GetUserPropertyValue("UserId");
+
+                if (UserId != null)
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Kullanici");
+                    }
+                    if (User.IsInRole("Yonetici") || User.IsInRole("Personel"))
+                    {
+                        return RedirectToAction("Index", "Izin");
+                    }
+                }
+            }
+            return RedirectToAction("LogOff");
         }
 
         //[HttpGet]
@@ -53,7 +70,7 @@ namespace izin.Controllers
             Kullanici user = new Kullanici();
 
             user = izinContext.Kullanicilar.Where(x => x.KullaniciAdi == model.UserName && x.Parola == model.Password).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 if (user.AktifMi == true)
                 {
@@ -65,13 +82,20 @@ namespace izin.Controllers
 
                         for (int i = 0; i < userRol.Count; i++)
                         {
-                            if (userRol[i].Id == 1){
+                            if (userRol[i].Id == 1)
+                            {
                                 claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-                            }else if(userRol[i].Id == 2){
+                            }
+                            else if (userRol[i].Id == 2)
+                            {
                                 claims.Add(new Claim(ClaimTypes.Role, "Yonetici"));
-                            }else if(userRol[i].Id == 3){
+                            }
+                            else if (userRol[i].Id == 3)
+                            {
                                 claims.Add(new Claim(ClaimTypes.Role, "Personel"));
-                            }else{
+                            }
+                            else
+                            {
                                 //do make hata  ekle
                                 return View(new LoginViewModel());
                             }
@@ -86,16 +110,18 @@ namespace izin.Controllers
                         AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, identity);
                         Session["userName"] = user.AdSoyad;
                         //do make navigation
-                        return RedirectToAction("Index", "Kullanici");
+
+                        //return RedirectToAction("Index", "Kullanici");
+                        return RedirectToAction("Navigate");
                     }
-                    
+
                 }
             }
             else
             {
                 model.LoginErrorMessage = "Yanlış Kullanıcı veya şifre";
                 return View("Login", model);
-                
+
             }
 
             return View(model);

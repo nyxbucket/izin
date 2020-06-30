@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace izin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DepartmanController : BaseController
     {
         private IzinContext izinContext = new IzinContext();

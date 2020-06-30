@@ -4,101 +4,101 @@
     Layout = "~/Views/Shared/_LayoutIzin.cshtml";
 }
 
-    <div>
-        <h2>Kullanıcı Ekle/Düzenle</h2>
+<div>
+    <h2>İzin Ekle/Düzenle</h2>
 
-        @using (Html.BeginForm("Ekle", "Izin", FormMethod.Post))
-        {
-            
-            <div class="form-horizontal">
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @using (Html.BeginForm("Ekle", "Izin", FormMethod.Post))
+    {
 
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                        @Html.LabelFor(model => model.IzinTipList, new { @class = "control-label col-md-2 font-bold" })
-                        <div class="col-md-5" id="SelectGun">
-                            @Html.DropDownList("izintipId", Model.IzinTipList, "Seçiniz", new { @class = "form-control" })
-                        </div>
-                        <div class="col-md-4">
-                            @if (Model.IzinTipId == 0)
-                            {
-                                @Html.ValidationMessageFor(model => model.IzinTipId, "", new { @class = "text-danger" })
-                            }
-                        </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+
+                    @Html.LabelFor(model => model.IzinTipList, new { @class = "control-label col-md-2 font-bold" })
+                    <div class="col-md-5" id="SelectGun">
+                        @Html.DropDownList("izintipId", Model.IzinTipList, "Seçiniz", new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4">
+                        @if (Model.IzinTipId == 0)
+                        {
+                            @Html.ValidationMessageFor(model => model.IzinTipId, "", new { @class = "text-danger" })
+                        }
                     </div>
                 </div>
-
-                <div class="row" id="gbaslangicts">
-                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
-                        @Html.LabelFor(model => model.BaslangicTS, new { @class = "control-label col-md-2" })
-                        <div class="col-md-5">
-                            @Html.TextBoxFor(model => model.BaslangicTS, new { @class = "form-control" })
-                        </div>
-                        <div class="col-md-4">
-                            @Html.ValidationMessageFor(model => model.BaslangicTS, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" id="gbitists">
-                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
-                        @Html.LabelFor(model => model.BitisTS, new { @class = "control-label col-md-2" })
-                        <div class="col-md-5">
-                            @Html.TextBoxFor(model => model.BitisTS, new { @class = "form-control" })
-                        </div>
-                        <div class="col-md-4">
-                            @Html.ValidationMessageFor(model => model.BitisTS, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6 form-group">
-                        @Html.LabelFor(model => model.IzinNedeni, new { @class = "control-label col-md-2 font-bold" })
-                        <div class="col-md-5">
-                            @Html.TextBoxFor(model => model.IzinNedeni, new { @class = "form-control", @oninput = "removeChar()" })
-                        </div>
-                        <div class="col-md-4">
-                            @Html.ValidationMessageFor(model => model.IzinNedeni, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Kaydet" class="btn btn-default" />
-                    </div>
-                </div>
-
-
             </div>
 
-            if (Model.DurumId == 2)
-            {
-                <p>
-                    <a href="@Url.Action("IzinOnayIndex")" class="back-link">
-                        <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
-                    </a>
-                </p>
-            }
-            else
-            {
-                <p>
-                    <a href="@Url.Action("Index")" class="back-link">
-                        <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
-                    </a>
-                </p>
-            }
+            <div class="row" id="gbaslangicts">
+                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                    @Html.LabelFor(model => model.BaslangicTS, new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.BaslangicTS, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.ValidationMessageFor(model => model.BaslangicTS, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="gbitists">
+                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                    @Html.LabelFor(model => model.BitisTS, new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.BitisTS, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.ValidationMessageFor(model => model.BitisTS, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                    @Html.LabelFor(model => model.IzinNedeni, new { @class = "control-label col-md-2 font-bold" })
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.IzinNedeni, new { @class = "form-control", @oninput = "removeChar()" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.ValidationMessageFor(model => model.IzinNedeni, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Kaydet" class="btn btn-default" />
+                </div>
+            </div>
+
+
+        </div>
+
+        if (Model.DurumId == 2)
+        {
+            <p>
+                <a href="@Url.Action("IzinOnayIndex")" class="back-link">
+                    <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
+                </a>
+            </p>
         }
+        else
+        {
+            <p>
+                <a href="@Url.Action("Index")" class="back-link">
+                    <i class="fa fa-arrow-left" style="margin-right: 5px;"></i>&nbsp; Izin Listesine Dön
+                </a>
+            </p>
+        }
+    }
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-        <script src="~/Scripts/moment-with-locales.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
-    </div>
+    <script src="~/Scripts/moment-with-locales.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+</div>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -115,14 +115,30 @@
     function timeFormatsaat() {
         $('#BaslangicTS').datetimepicker({ format: 'DD.MM.YYYY HH:mm:ss', locale: 'tr' })
         $('#BitisTS').datetimepicker({ format: 'DD.MM.YYYY HH:mm:ss', locale: 'tr' })
-    }   
+    }
 
-    
+
 
     $(document).ready(function () {
-        
+
         timeFormatsaat();
-        
+
     });
 
+
+</script>
+
+<script type="text/javascript" charset="utf-8">
+            $(document).ready(function () {
+                if (@(ViewBag.GenelHata != null?"true":"false")) {
+                    swal({
+                        title: "",
+                        text: "@ViewBag.GenelHata",
+                        type: "warning",
+                        confirmButtonText: "Tamam",
+                        html: true,
+                    });
+
+                }
+            });
 </script>

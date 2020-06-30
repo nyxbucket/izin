@@ -1,7 +1,6 @@
 ﻿@model izin.Models.IzinPageVM
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "IndexOnay";
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
@@ -13,15 +12,15 @@
                 <div class="widget-body">
                     <div class="tab-pane fade active in">
 
-                        @using (Html.BeginForm("Index", "Izin", new { page = 1 }, FormMethod.Post, new { @id = "submitForm" }))
+                        @using (Html.BeginForm("IndexOnay", "Izin", new { page = 1 }, FormMethod.Post, new { @id = "submitForm" }))
                         {
                             <input id="page" name="page" type="hidden" value="">
                             <div class="widget-body">
                                 <fieldset>
                                     <div class="col-sm-12 col-md-6 col-lg-4 form-group">
-                                        @Html.LabelFor(model => model.IzinTipList, new { @class = "control-label col-md-2 font-bold" })
+                                        @Html.LabelFor(model => model.TeamUserList, new { @class = "control-label col-md-2 font-bold" })
                                         <div class="col-md-5">
-                                            @Html.DropDownList("izintipId", Model.IzinTipList, "Seçiniz", new { @class = "form-control" })
+                                            @Html.DropDownList("kullaniciId", Model.TeamUserList, "Seçiniz", new { @class = "form-control" })
                                         </div>
                                     </div>
 
@@ -85,7 +84,7 @@
                                             <thead>
                                                 <tr role="row">
                                                     <th style="width: 20px;">No</th>
-                                                    <th class="sorting_disabled" rowspan="1" colspan="1">İzin Türü</th>
+                                                    <th class="sorting_disabled" rowspan="1" colspan="1">Ad Soyad</th>
                                                     <th class="sorting_disabled" rowspan="1" colspan="1">Başlangıç Tarihi</th>
                                                     <th class="sorting_disabled" rowspan="1" colspan="1">Bitiş Tarihi</th>
                                                     <th class="sorting_disabled" rowspan="1" colspan="1">Durumu</th>
@@ -102,29 +101,21 @@
                                                     {
                                                         <tr role="row" class="odd">
                                                             <td>@(i++)</td>
-                                                            <td>@izin.Helper.EnumHelper.GetEnumDescription((izin.Data.Enum.IzinTipEnum)item.IzinTipId)</td>
+                                                            <td>@item.IzinKullanici.AdSoyad</td>
                                                             <td>@string.Format("{0:dd.MM.yyyy HH:mm:ss}", @item.BaslangicTarihi)</td>
                                                             <td>@string.Format("{0:dd.MM.yyyy HH:mm:ss}", @item.BitisTarihi)</td>
                                                             <td>@izin.Helper.EnumHelper.GetEnumDescription((izin.Data.Enum.IzinDurumEnum)item.DurumId)</td>
                                                             <td style="text-align: center;">
-                                                                @if (item.DurumId == 1)
-                                                                {
-                                                                    <a href="@Url.Action("Ekle", new { id = item.Id })" class="btn btn-warning btn-xs duzenle-buton" style="border-radius: 5px;" title="Düzenle">
-                                                                        Düzenle
-                                                                    </a>
-                                                                    <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="IzinSil(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Izin Sil">
-                                                                        İzin Sil
-                                                                    </a>
-                                                                    <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="OnayaGonder(@item.Id)" data-placement="left" class="btn btn-nl btn-xs duzenle-buton" data-original-title="Onaya Gönder">
-                                                                        Onaya Gönder
-                                                                    </a>
-                                                                }
-                                                                else if (item.DurumId == 3 && (User.IsInRole("Yonetici") || (User.IsInRole("Admin"))))
-                                                                {
-                                                                    <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="IzinSil(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Izin Sil">
-                                                                        İzin Sil
-                                                                    </a>
-                                                                }
+
+
+                                                                <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="Onayla(@item.Id)" data-placement="left" class="btn btn-nl btn-xs duzenle-buton" data-original-title="Onayla">
+                                                                    <i class="glyphicon glyphicon-ok"></i> Onayla
+                                                                </a>
+
+                                                                <a href="javascript:void(0)" title="" rel="tooltip" data-id="@item.Id" onclick="Reddet(@item.Id)" data-placement="left" class="btn  btn-nl-delete duzenle-buton" data-original-title="Reddet">
+                                                                    <i class="glyphicon glyphicon-remove"></i> Reddet
+                                                                </a>
+
 
 
                                                             </td>
@@ -172,75 +163,9 @@
         changeYear: true,
         yearRange: "-60:+0",
         language: 'tr'
-    });
-
-    function IzinSil(izinId) {
-
-        swal({
-            title: "",
-            text: "İzin silinecektir. Onaylıyor musunuz?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "İzini Sil",
-            cancelButtonText: "İptal",
-            closeOnConfirm: false,
-        },
-            function () {
-                $.ajax({
-                    type: "POST",
-                    url: "/Izin/IzinSil",
-                    data: { 'izinId': izinId },
-                    success: function (response) {
-                        if (response != true) {
-                            swal(response);
-                        } else {
-                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
-                                function () {
-                                    window.location.href = '/Izin/index';
-                                }
-                            );
-                        }
-                    }
-                });
-            });
-
-    }
-
-    function OnayaGonder(izinId) {
-
-        swal({
-            title: "",
-            text: "İzin talebiniz onaya gönderilecektir. Onaylıyorumusunuz?",
-            type: "info",
-            showCancelButton: true,
-            confirmButtonClass: "btn-success",
-            confirmButtonText: "Onayla",
-            cancelButtonText: "Vazgeç",
-            closeOnConfirm: false,
-        },
-            function () {
-                $.ajax({
-                    type: "POST",
-                    url: "/Izin/OnayaGonder",
-                    data: { 'izinId': izinId },
-                    success: function (response) {
-                        if (response != true) {
-                            swal(response);
-                        } else {
-                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
-                                function () {
-                                    window.location.href = '/Izin/index';
-                                }
-                            );
-                        }
-                    }
-                });
-            });
-
-    }
-
-    function Onay(id) {
+    });    
+    
+    function Onayla(id) {
 
         swal({
             title: "",
@@ -255,7 +180,7 @@
             function () {
                 $.ajax({
                     type: "POST",
-                    url: "/Izin/OnaylaIndex",
+                    url: "/Izin/Onayla",
                     data: { 'id': id },
                     success: function (response) {
                         if (response != true) {
@@ -263,7 +188,39 @@
                         } else {
                             swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
                                 function () {
-                                    window.location.href = '/Izin/Index';
+                                    window.location.href = '/Izin/IndexOnay';
+                                }
+                            );
+                        }
+                    }
+                });
+            });
+    }
+
+    function Reddet(id) {
+
+        swal({
+            title: "",
+            text: "İzin talebi sonlanacaktır. Onaylıyorumusunuz?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "İzini Reddet",
+            cancelButtonText: "İptal",
+            closeOnConfirm: false,
+        },
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Izin/Reddet",
+                    data: { 'id': id },
+                    success: function (response) {
+                        if (response != true) {
+                            swal("İşlem sırasında bir hata oluştu");
+                        } else {
+                            swal({ title: "", text: "İşlem başarıyla gerçekleşti", type: "success", timer: 1000, showConfirmButton: false },
+                                function () {
+                                    window.location.href = '/Izin/IndexOnay';
                                 }
                             );
                         }
