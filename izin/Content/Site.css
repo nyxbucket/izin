@@ -49,6 +49,24 @@ textarea {
     margin-left: 20px;
 }
 
-/*#left-panel {
-    padding-top: 90px;
+/*section {
+    float: left;
+    margin: 0 1.5%;
+    width: 63%;
 }*/
+
+aside {
+    float: left;
+    width: 12%;
+    background-color: #ddeaea;
+    height:844px;
+}
+
+#content {
+    float: right;
+    margin: 10px;
+    width: 85%;
+}
+.index-btn {
+    margin-left: 30px;
+}

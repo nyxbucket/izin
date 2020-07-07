@@ -49,12 +49,10 @@
                             </div>
                             <div class="form-actions btn-foot-s">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="col-md-2" style="width: 170px;">
-                                            <a href="@Url.Action("Ekle")" class="btn btn-primary">
-                                                <i class="glyphicon glyphicon-plus"></i> &nbsp; İzin Ekle
-                                            </a>
-                                        </div>
+                                    <div class="col-md-12 index-btn">
+                                        <a href="@Url.Action("Ekle")" class="btn btn-primary">
+                                            <i class="glyphicon glyphicon-plus"></i> &nbsp; İzin Ekle
+                                        </a>
                                         <a href="@Url.Action("Index")" class="btn btn-primary">
                                             <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
                                         </a>
@@ -175,7 +173,7 @@
     });
 
     function IzinSil(izinId) {
-
+        debugger
         swal({
             title: "",
             text: "İzin silinecektir. Onaylıyor musunuz?",

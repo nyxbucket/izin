@@ -51,9 +51,7 @@ namespace izin.Controllers
             return RedirectToAction("LogOff");
         }
 
-        //[HttpGet]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public ActionResult Login()
         {
             return View(new LoginViewModel());
@@ -61,7 +59,6 @@ namespace izin.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             string username = model.UserName.Trim();

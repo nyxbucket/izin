@@ -48,16 +48,11 @@
                             </div>
                             <div class="form-actions btn-foot-s">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="col-md-2" style="width: 170px;">
-                                            <a href="@Url.Action("Ekle")" class="btn btn-primary">
-                                                <i class="glyphicon glyphicon-plus"></i> &nbsp; İzin Ekle
+                                    <div class="col-md-12 index-btn ">  
+                                            <a href="@Url.Action("Index")" class="btn btn-primary">
+                                                <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
                                             </a>
-                                        </div>
-                                        <a href="@Url.Action("Index")" class="btn btn-primary">
-                                            <i class="glyphicon glyphicon-refresh"></i> &nbsp; Temizle
-                                        </a>
-                                        <input id="btnSubmit" type="submit" value="Sorgula" class="btn btn-primary">
+                                            <input id="btnSubmit" type="submit" value="Sorgula" class="btn btn-primary">                                        
                                     </div>
                                 </div>
                             </div>
@@ -163,8 +158,8 @@
         changeYear: true,
         yearRange: "-60:+0",
         language: 'tr'
-    });    
-    
+    });
+
     function Onayla(id) {
 
         swal({
